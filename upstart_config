@@ -1,0 +1,26 @@
+description "djangoimager"
+
+start on (filesystem)
+stop on runlevel [016]
+
+respawn
+setuid nobody
+setgid nogroup
+chdir /home/ubuntu/django-imager/imagersite
+
+script
+ . /home/ubuntu/django-imager/bin/activate
+end script
+
+env DJANGO_SETTINGS_MODULE=imagersite.production
+env DB_PASS='PASSWORD GOES HERE'
+env DB_USER='USERNAME GOES HERE'
+env DB_HOST='djangoimager.c4fhfsyf7opd.us-west-2.rds.amazonaws.com'
+env DB_PORT='5432'
+env DB_NAME='name_of_db'
+env EMAIL_PASS='PASSWORD GOES HERE'
+env SERVER_EMAIL='codefellowsdjango401imager@gmail.com'
+env DEFAULT_FROM_EMAIL='SOURCE SHOT IMAGER SITE BRO. TROLLPY'
+env ALLOWED_HOSTS='ec2-54-245-7-225.us-west-2.compute.amazonaws.com 54.245.7.225 localhost'
+env DEBUG='False'
+exec /home/ubuntu/django-imager/bin/gunicorn -b 127.0.0.1:8000 -w 4 imagersite.wsgi:application
